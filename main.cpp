@@ -2,11 +2,18 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <windows.h>
+#include <cstdlib>
+#include <ctime>
+
+#define MAX 5
+
 using namespace std;
 
 const int SCREEN_WIDTH = 1200;
 const int SCREEN_HEIGHT = 600;
 const string WINDOW_TITLE = "Game";
+
+const int place[] = {100,300,500};
 
 void logSDLError(std::ostream& os,
                  const std::string &msg, bool fatal = false);
@@ -14,9 +21,16 @@ void initSDL(SDL_Window* &window, SDL_Renderer* &renderer);
 void quitSDL(SDL_Window* window, SDL_Renderer* renderer);
 void waitUntilKeyPressed();
 
-void refreshScreen(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* background, SDL_Texture* character, SDL_Rect&characterRect);
+void refreshScreen(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* background,
+    SDL_Texture* character, SDL_Texture* object[], SDL_Rect& characterRect, SDL_Rect objectRect[]);
 
 SDL_Texture* loadTexture( string path, SDL_Renderer* renderer );
+
+bool check (SDL_Rect object1Rect, SDL_Rect& characterRect);
+
+
+
+
 
 int main (int argc, char*argv[])
 {
@@ -28,7 +42,7 @@ int main (int argc, char*argv[])
     SDL_RenderCopy(renderer, background, nullptr, nullptr);
     SDL_RenderPresent(renderer);
 
-    SDL_Texture* character = loadTexture("doraemon.png", renderer);
+    SDL_Texture* character = loadTexture("mon.png", renderer);
     SDL_Rect characterRect;
     SDL_QueryTexture(character, nullptr, nullptr, &characterRect.w, &characterRect.h);
     characterRect.x = 0;
@@ -36,22 +50,61 @@ int main (int argc, char*argv[])
     characterRect.w = characterRect.w/4.0;
     characterRect.h = characterRect.h/4.0;
     SDL_RenderCopy( renderer, character, NULL, &characterRect );
-
     SDL_RenderPresent( renderer );
 
+    SDL_Texture* object[MAX];
+    SDL_Rect objectRect[MAX];
+
+    for (int i = 0; i < MAX; i++)
+    {
+        object[i] = loadTexture("mouse.png", renderer);
+        SDL_QueryTexture(object[i], nullptr, nullptr, &objectRect[i].w, &objectRect[i].h);
+        objectRect[i].x = SCREEN_WIDTH - 200 + i * 400;
+        objectRect[i].y = SCREEN_HEIGHT - 100;
+        objectRect[i].w = objectRect[i].w/6.0;
+        objectRect[i].h = objectRect[i].h/6.0;
+        SDL_RenderCopy( renderer, object[i], NULL, &objectRect[i] );
+        SDL_RenderPresent( renderer );
+    }
+
     SDL_Event e;
+    int step=200;
 
-    int step = 150;
-    refreshScreen(window, renderer, background, character, characterRect);
+    srand(time(0));
 
-    while (true) {
+    while(true)
+    {
+        for(int i = 0; i < MAX; i++)
+        {
+            SDL_Delay(5);
+            objectRect[i].x-=10;
+                    if(objectRect[i].x < 10)
+                    {
+                    int random = rand()%3;
+                    objectRect[i].y = place[random];
+                    objectRect[i].x = 1200;
+                    }
+            if(check(objectRect[i],characterRect))
+            {
+               SDL_DestroyTexture( background );
+    background = nullptr;
+    SDL_DestroyTexture( character );
+    character = nullptr;
+    for ( int i = 0; i < MAX; i++ )
+    {
+    SDL_DestroyTexture( object[i] );
+    object[i] = nullptr;
+    }
 
-        SDL_Delay(10);
+    quitSDL(window, renderer);
 
-        if ( SDL_WaitEvent(&e) == 0) continue;
+            }
+        }
 
+
+        refreshScreen(window, renderer, background, character, object, characterRect, objectRect);
+        if (SDL_PollEvent(&e) == 0) continue;
         if (e.type == SDL_QUIT) break;
-
         if (e.type == SDL_KEYDOWN) {
         	switch (e.key.keysym.sym) {
         		case SDLK_ESCAPE: break;
@@ -62,21 +115,24 @@ int main (int argc, char*argv[])
             	case SDLK_DOWN: characterRect.y = (characterRect.y + step) % SCREEN_HEIGHT;
 					break;
             	case SDLK_UP: characterRect.y = (characterRect.y + SCREEN_HEIGHT - step) % SCREEN_HEIGHT;
-                    break;
-        		default: break;
+            	    break;
+                default: break;
 			}
-
-            refreshScreen(window, renderer, background, character, characterRect);
         }
+
+
+        }
+
+
+    SDL_DestroyTexture( background );
+    background = nullptr;
+    SDL_DestroyTexture( character );
+    character = nullptr;
+    for ( int i = 0; i < MAX; i++ )
+    {
+    SDL_DestroyTexture( object[i] );
+    object[i] = nullptr;
     }
-
-
-    SDL_DestroyTexture( character );
-    character = nullptr;
-    SDL_DestroyTexture( character );
-    character = nullptr;
-
-    waitUntilKeyPressed();
 
     quitSDL(window, renderer);
 
@@ -143,12 +199,47 @@ SDL_Texture* loadTexture( string path, SDL_Renderer* renderer )
     return newTexture;
 }
 
-void refreshScreen(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* background, SDL_Texture* character, SDL_Rect& characterRect)
+void refreshScreen(SDL_Window* window, SDL_Renderer* renderer, SDL_Texture* background,
+    SDL_Texture* character, SDL_Texture* object[], SDL_Rect& characterRect, SDL_Rect objectRect[])
 {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, background, nullptr, nullptr);
     SDL_RenderCopy( renderer, character, NULL, &characterRect );
+    for (int i = 0; i < MAX; i++)
+    {
+      SDL_RenderCopy( renderer, object[i], NULL, &objectRect[i] );
+    }
+
     SDL_RenderPresent(renderer);
+}
+
+bool check (SDL_Rect object1Rect, SDL_Rect& characterRect)
+{
+    int left1 = object1Rect.x;
+    int right1 = object1Rect.x + object1Rect.w;
+    int top1 = object1Rect.y;
+    int bot1 = object1Rect.y + object1Rect.h;
+
+    int left2 = characterRect.x;
+    int right2 = characterRect.x + characterRect.w;
+    int top2 = characterRect.y;
+    int bot2 = characterRect.y + characterRect.h;
+
+    if (left2 < right1 && right2 - 75 > right1 )
+    {
+        if (top2 < bot1 && bot2 > bot1)
+            return true;
+        else if (top2 < top1 && bot2 > top1)
+            return true;
+    }
+    if (left2 < left1 && right2 - 75 > left1)
+    {
+        if (top2 < bot1 && bot2 > bot1)
+            return true;
+        else if (top2 < top1 && bot2 > top1)
+            return true;
+    }
+    return false;
 }
 
 
