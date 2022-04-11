@@ -13,13 +13,11 @@
 #include "Enemy.h"
 #include "game.h"
 
-
-
 using namespace std;
 
 Character character;
 Enemy enemy[MAX];
-Text textTexture;
+Text text;
 
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
@@ -33,7 +31,7 @@ SDL_Rect characterRect;
 Mix_Music *Music = NULL;
 Mix_Chunk *Die = NULL;
 
-TTF_Font *fontText = NULL;
+TTF_Font* fontText = NULL;
 
 void open();
 void close();
@@ -56,6 +54,8 @@ int main (int argc, char*argv[])
     while(!GameOver)
     {
         score++;
+        text.content = "Score: " + to_string(score);
+        SDL_Texture* textTexture = text.loadFromRenderedText( fontText, renderer );
         for(int i = 0; i < MAX; i++)
         {
             enemy[i].move(score);
@@ -69,16 +69,19 @@ int main (int argc, char*argv[])
         character.render(renderer, characterTexture, characterRect);
         for(int i = 0; i < MAX; i++)
         enemy[i].render(renderer, enemyTexture, enemy[i].eRect);
+        text.render(renderer, textTexture, text.Rect);
         SDL_RenderPresent(renderer);
 
         if (SDL_PollEvent(&e) == 0) continue;
         if (e.type == SDL_QUIT) break;
         character.move(e);
         SDL_RenderPresent(renderer);
+        SDL_DestroyTexture( textTexture );
+        textTexture = nullptr;
+
     }
 
     Mix_PlayChannel( -1, Die, 0 );
-    cout << score;
     waitUntilKeyPressed();
     close();
     return 0;
@@ -107,6 +110,8 @@ void close()
     Mix_FreeMusic( Music );
     Music = nullptr;
     quitSDL(window, renderer);
+    TTF_CloseFont( fontText );
+	fontText = nullptr;
 }
 
 

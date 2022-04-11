@@ -55,6 +55,7 @@ void quitSDL(SDL_Window* window, SDL_Renderer* renderer)
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	Mix_Quit();
+	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
 }
