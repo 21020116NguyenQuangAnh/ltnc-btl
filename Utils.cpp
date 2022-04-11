@@ -25,6 +25,17 @@ void initSDL(SDL_Window* &window, SDL_Renderer* &renderer)
     if (renderer == nullptr) logSDLError(std::cout, "CreateRenderer", true);
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+    if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+                {
+                    cout<< "SDL_mixer could not initialize! SDL_mixer Error:" <<endl;
+                    Mix_GetError();
+                }
+
+    if( TTF_Init() == -1 )
+				{
+					cout<< "SDL_ttf could not initialize! SDL_ttf Error:" <<endl;
+                    TTF_GetError();
+				}
 
 }
 

@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 #include <string>
 
 #define MAX 5
@@ -15,6 +16,4 @@ const int SCREEN_HEIGHT = 600;
 const string WINDOW_TITLE = "Game";
 
 SDL_Texture* loadTexture( string path, SDL_Renderer* renderer );
-void OpenAudio ();
-
 #endif // COMMON_H

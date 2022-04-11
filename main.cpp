@@ -2,20 +2,24 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 #include <cstdlib>
 #include <ctime>
 
 #include "Utils.h"
 #include "common.h"
+#include "Text.h"
 #include "Character.h"
 #include "Enemy.h"
 #include "game.h"
+
 
 
 using namespace std;
 
 Character character;
 Enemy enemy[MAX];
+Text textTexture;
 
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
@@ -29,6 +33,8 @@ SDL_Rect characterRect;
 Mix_Music *Music = NULL;
 Mix_Chunk *Die = NULL;
 
+TTF_Font *fontText = NULL;
+
 void open();
 void close();
 
@@ -36,7 +42,6 @@ int main (int argc, char*argv[])
 {
 
     initSDL(window, renderer);
-    OpenAudio();
     open();
     Mix_PlayMusic( Music, -1 );
 
@@ -84,6 +89,7 @@ void open()
     background = loadTexture("Wallpaper.jpg", renderer);
     characterTexture = loadTexture("mon.png", renderer);
     enemyTexture = loadTexture("mouse.png", renderer);
+    fontText = TTF_OpenFont( "OpenSans_Regular.ttf", 24 );
     Music = Mix_LoadMUS( "DoraemonNoUta.wav" );
 	Die = Mix_LoadWAV( "doraemonsms.wav" );
 }
