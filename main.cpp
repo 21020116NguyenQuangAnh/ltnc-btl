@@ -18,6 +18,7 @@ using namespace std;
 Character character;
 Enemy enemy[MAX];
 Text text;
+Text FinalScore;
 
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
@@ -55,7 +56,7 @@ int main (int argc, char*argv[])
     {
         score++;
         text.content = "Score: " + to_string(score);
-        SDL_Texture* textTexture = text.loadFromRenderedText( fontText, renderer );
+        SDL_Texture* textTexture = text.loadFromRenderedText(fontText, renderer);
         for(int i = 0; i < MAX; i++)
         {
             enemy[i].move(score);
@@ -78,11 +79,19 @@ int main (int argc, char*argv[])
         SDL_RenderPresent(renderer);
         SDL_DestroyTexture( textTexture );
         textTexture = nullptr;
-
     }
 
     Mix_PlayChannel( -1, Die, 0 );
     waitUntilKeyPressed();
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, background, nullptr, nullptr);
+    FinalScore.content = "Your score is: " + to_string(score);
+    SDL_Texture* scoreTexture = FinalScore.loadFromRenderedText(fontText, renderer);
+    FinalScore.render(renderer, scoreTexture, FinalScore.Rect);
+    SDL_RenderPresent(renderer);
+    waitUntilKeyPressed();
+    SDL_DestroyTexture( scoreTexture );
+    scoreTexture = nullptr;
     close();
     return 0;
 }
