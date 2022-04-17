@@ -8,6 +8,8 @@
 #include <SDL_ttf.h>
 #include <string>
 
+#include "Utils.h"
+
 #define MAX 5
 using namespace std;
 
