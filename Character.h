@@ -11,8 +11,9 @@ const int step = 200;
 
 struct Character{
     int x;
-    int y = 400;
+    int y;
 
+    void setpos(int _x, int  _y);
     void render(SDL_Renderer* renderer, SDL_Texture* characterTexture, SDL_Rect &characterRect);
     void move(SDL_Event &e);
 };

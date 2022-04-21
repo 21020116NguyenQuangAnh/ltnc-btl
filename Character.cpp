@@ -2,6 +2,12 @@
 
 using namespace std;
 
+void Character::setpos(int _x, int _y)
+{
+    x = _x;
+    y = _y;
+}
+
 void Character::render(SDL_Renderer* renderer, SDL_Texture* characterTexture, SDL_Rect &characterRect)
 {
     characterRect.x = x;

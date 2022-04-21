@@ -49,13 +49,8 @@ int main (int argc, char*argv[])
     Mix_PlayMusic( Music, -1 );
 
     SDL_Event e;
-    int score = 0;
-    bool GameOver = false;
+    bool QuitGame = false;
 
-    for (int i = 0; i < MAX; i++)
-    {
-        enemy[i].setpos(SCREEN_WIDTH - 200 + 400 * i, place[rand()%3]);
-    }
     SDL_RenderCopy(renderer, menu, nullptr, nullptr);
     Button[0].content = "Play Game";
     Button[0].Color = {255,0,0};
@@ -69,49 +64,69 @@ int main (int argc, char*argv[])
     }
     SDL_RenderPresent(renderer);
     if (Selection(e, Button) == 1)
-        return 0;
-    while(!GameOver)
+        QuitGame = 1;
+    while (!QuitGame)
     {
-        score++;
-        text.content = "Score: " + to_string(score);
-        SDL_Texture* textTexture = text.loadFromRenderedText(fontText, renderer);
-        text.setpos(0,10);
-        for(int i = 0; i < MAX; i++)
+        character.setpos(0,400);
+        character.render(renderer, characterTexture, characterRect);
+        for (int i = 0; i < MAX; i++)
         {
-            enemy[i].move(score);
-            if(check(enemy[i].eRect,characterRect))
-            {
-                GameOver = true;
-            }
+            enemy[i].setpos(SCREEN_WIDTH - 200 + 400 * i, place[rand()%3]);
+            enemy[i].render(renderer, enemyTexture, enemy[i].eRect);
         }
+
+        bool GameOver = false;
+        int score = 0;
+
+        while(!GameOver)
+        {
+            score++;
+            text.content = "Score: " + to_string(score);
+            SDL_Texture* textTexture = text.loadFromRenderedText(fontText, renderer);
+            text.setpos(0,10);
+            for(int i = 0; i < MAX; i++)
+            {
+                enemy[i].move(score);
+                if(check(enemy[i].eRect,characterRect))
+                {
+                    GameOver = true;
+                }
+            }
+            SDL_RenderClear(renderer);
+            SDL_RenderCopy(renderer, background, nullptr, nullptr);
+            character.render(renderer, characterTexture, characterRect);
+            for(int i = 0; i < MAX; i++)
+            enemy[i].render(renderer, enemyTexture, enemy[i].eRect);
+            text.render(renderer, textTexture, text.Rect);
+            SDL_RenderPresent(renderer);
+
+            if (SDL_PollEvent(&e) == 0) continue;
+            if (e.type == SDL_QUIT) break;
+            character.move(e);
+            SDL_RenderPresent(renderer);
+            SDL_DestroyTexture( textTexture );
+            textTexture = nullptr;
+        }
+
+        Mix_PlayChannel( -1, Die, 0 );
+        waitUntilKeyPressed();
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, background, nullptr, nullptr);
-        character.render(renderer, characterTexture, characterRect);
-        for(int i = 0; i < MAX; i++)
-        enemy[i].render(renderer, enemyTexture, enemy[i].eRect);
-        text.render(renderer, textTexture, text.Rect);
+        FinalScore.content = "Your score is: " + to_string(score);
+        SDL_Texture* scoreTexture = FinalScore.loadFromRenderedText(fontText, renderer);
+        FinalScore.setpos(0,10);
+        FinalScore.render(renderer, scoreTexture, FinalScore.Rect);
+        for (int i = 0; i < 2; i++)
+        {
+            Button[i].setpos(0, 475 + 75 * i);
+            Button[i].render(renderer, ButtonTexture[i], Button[i].Rect);
+        }
         SDL_RenderPresent(renderer);
-
-        if (SDL_PollEvent(&e) == 0) continue;
-        if (e.type == SDL_QUIT) break;
-        character.move(e);
-        SDL_RenderPresent(renderer);
-        SDL_DestroyTexture( textTexture );
-        textTexture = nullptr;
+        if (Selection(e, Button) == 1)
+            QuitGame = 1;
+        SDL_DestroyTexture( scoreTexture );
+        scoreTexture = nullptr;
     }
-
-    Mix_PlayChannel( -1, Die, 0 );
-    waitUntilKeyPressed();
-    SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, background, nullptr, nullptr);
-    FinalScore.content = "Your score is: " + to_string(score);
-    SDL_Texture* scoreTexture = FinalScore.loadFromRenderedText(fontText, renderer);
-    FinalScore.setpos(0,10);
-    FinalScore.render(renderer, scoreTexture, FinalScore.Rect);
-    SDL_RenderPresent(renderer);
-    waitUntilKeyPressed();
-    SDL_DestroyTexture( scoreTexture );
-    scoreTexture = nullptr;
     close();
     return 0;
 }
@@ -138,6 +153,11 @@ void close()
     characterTexture = nullptr;
     SDL_DestroyTexture( enemyTexture );
     enemyTexture = nullptr;
+    for (int i = 0; i < 2; i++)
+    {
+        SDL_DestroyTexture(ButtonTexture[i]);
+        ButtonTexture[i] = nullptr;
+    }
     Mix_FreeChunk( Die );
     Die = nullptr;
     Mix_FreeMusic( Music );
@@ -145,6 +165,9 @@ void close()
     quitSDL(window, renderer);
     TTF_CloseFont( fontText );
 	fontText = nullptr;
+	TTF_CloseFont( fontButton );
+	fontButton = nullptr;
+
 }
 
 
