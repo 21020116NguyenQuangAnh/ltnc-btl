@@ -5,7 +5,7 @@
 #include <ctime>
 #include "common.h"
 
-#define ENEMY_WIDTH 130
+#define ENEMY_WIDTH 100
 #define ENEMY_HEIGHT 100
 
 const int place[] = {100,300,500};

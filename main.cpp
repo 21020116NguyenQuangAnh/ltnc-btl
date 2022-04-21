@@ -121,7 +121,7 @@ void open()
     menu = loadTexture("menu.png",renderer);
     background = loadTexture("Wallpaper.jpg", renderer);
     characterTexture = loadTexture("mon.png", renderer);
-    enemyTexture = loadTexture("mouse.png", renderer);
+    enemyTexture = loadTexture("mouse5.png", renderer);
     fontText = TTF_OpenFont( "OpenSans_Regular.ttf", 24 );
     fontButton = TTF_OpenFont( "SuperMario256.ttf", 36);
     Music = Mix_LoadMUS( "DoraemonNoUta.wav" );
