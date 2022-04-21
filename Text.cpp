@@ -24,6 +24,12 @@ SDL_Texture* Text::loadFromRenderedText( TTF_Font* fontText, SDL_Renderer* rende
         return newTexture;
 }
 
+void Text::setpos(int _x, int _y)
+{
+    x = _x;
+    y = _y;
+}
+
 void Text::render (SDL_Renderer* renderer, SDL_Texture* textTexture, SDL_Rect &Rect)
 {
         SDL_QueryTexture(textTexture, nullptr, nullptr, &Rect.w, &Rect.h);

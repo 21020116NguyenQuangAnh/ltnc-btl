@@ -11,6 +11,7 @@ struct Text{
     string content;
 
     SDL_Texture* loadFromRenderedText( TTF_Font* fontText, SDL_Renderer* renderer );
-    void render (SDL_Renderer* renderer, SDL_Texture* textTexture, SDL_Rect &Rect);
+    void setpos(int _x, int _y);
+    void render(SDL_Renderer* renderer, SDL_Texture* textTexture, SDL_Rect &Rect);
 };
 #endif // TEXT_H

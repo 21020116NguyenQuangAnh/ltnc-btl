@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include <ctime>
 #include "common.h"
-#include "game.h"
 
 #define ENEMY_WIDTH 130
 #define ENEMY_HEIGHT 100

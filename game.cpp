@@ -30,3 +30,35 @@ bool check (SDL_Rect object1Rect, SDL_Rect& characterRect)
     }
     return false;
 }
+
+bool CheckInside (int &x, int &y, SDL_Rect& rect)
+{
+    if (x >= rect.x && x <= rect.x + rect.w && y >= rect.y && y <= rect.y + rect.h)
+        return true;
+    return false;
+}
+
+int Selection(SDL_Event &e, Text Button[])
+{
+    while (true)
+    {
+        if (SDL_PollEvent(&e)!=0)
+        {
+            switch (e.type)
+            {
+                case SDL_QUIT:
+                    return 1;
+                case SDL_MOUSEBUTTONDOWN:
+                {
+                     for (int i = 0; i < 2; i++)
+                     {
+                         if (CheckInside(e.button.x, e.button.y, Button[i].Rect))
+                            return i;
+                     }
+                }
+                break;
+                default: break;
+            }
+        }
+    }
+}

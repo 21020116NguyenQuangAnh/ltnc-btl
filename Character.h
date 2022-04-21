@@ -2,7 +2,6 @@
 #define CHARACTER_H
 
 #include "common.h"
-#include "game.h"
 
 #define CHARACTER_WIDTH 200
 #define CHARACTER_HEIGHT 200
