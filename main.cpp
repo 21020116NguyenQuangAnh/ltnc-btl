@@ -16,6 +16,7 @@
 using namespace std;
 
 Character character;
+Character DeadCharacter;
 Enemy enemy[MAX];
 Text text;
 Text Button[2];
@@ -27,6 +28,7 @@ SDL_Renderer* renderer = NULL;
 SDL_Texture* menu = NULL;
 SDL_Texture* background = NULL;
 SDL_Texture* characterTexture = NULL;
+SDL_Texture* DeadCharacterTexture = NULL;
 SDL_Texture* enemyTexture = NULL;
 SDL_Texture* ButtonTexture[2];
 
@@ -94,7 +96,15 @@ int main (int argc, char*argv[])
             }
             SDL_RenderClear(renderer);
             SDL_RenderCopy(renderer, background, nullptr, nullptr);
-            character.render(renderer, characterTexture, characterRect);
+            if (!GameOver)
+            {
+                character.render(renderer, characterTexture, characterRect);
+            }
+            else
+            {
+                DeadCharacter.setpos(characterRect.x, characterRect.y);
+                DeadCharacter.render(renderer, DeadCharacterTexture, characterRect);
+            }
             for(int i = 0; i < MAX; i++)
             enemy[i].render(renderer, enemyTexture, enemy[i].eRect);
             text.render(renderer, textTexture, text.Rect);
@@ -107,13 +117,13 @@ int main (int argc, char*argv[])
             SDL_DestroyTexture( textTexture );
             textTexture = nullptr;
         }
-
         Mix_PlayChannel( -1, Die, 0 );
-        waitUntilKeyPressed();
+        SDL_Delay(5000);
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, background, nullptr, nullptr);
         FinalScore.content = "Your score is: " + to_string(score);
-        SDL_Texture* scoreTexture = FinalScore.loadFromRenderedText(fontText, renderer);
+        FinalScore.Color = {130, 0, 255};
+        SDL_Texture* scoreTexture = FinalScore.loadFromRenderedText(fontButton, renderer);
         FinalScore.setpos(0,10);
         FinalScore.render(renderer, scoreTexture, FinalScore.Rect);
         for (int i = 0; i < 2; i++)
@@ -136,6 +146,7 @@ void open()
     menu = loadTexture("menu.png",renderer);
     background = loadTexture("Wallpaper.jpg", renderer);
     characterTexture = loadTexture("mon.png", renderer);
+    DeadCharacterTexture = loadTexture("mon_end.png", renderer);
     enemyTexture = loadTexture("mouse5.png", renderer);
     fontText = TTF_OpenFont( "OpenSans_Regular.ttf", 24 );
     fontButton = TTF_OpenFont( "SuperMario256.ttf", 36);
@@ -151,6 +162,8 @@ void close()
     background = nullptr;
     SDL_DestroyTexture( characterTexture );
     characterTexture = nullptr;
+    SDL_DestroyTexture( DeadCharacterTexture);
+    DeadCharacterTexture = nullptr;
     SDL_DestroyTexture( enemyTexture );
     enemyTexture = nullptr;
     for (int i = 0; i < 2; i++)
