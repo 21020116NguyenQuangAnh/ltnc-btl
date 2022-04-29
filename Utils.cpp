@@ -28,13 +28,13 @@ void initSDL(SDL_Window* &window, SDL_Renderer* &renderer)
     if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
                 {
                     cout<< "SDL_mixer could not initialize! SDL_mixer Error:" <<endl;
-                    Mix_GetError();
+                    cout<<Mix_GetError();
                 }
 
     if( TTF_Init() == -1 )
 				{
 					cout<< "SDL_ttf could not initialize! SDL_ttf Error:" <<endl;
-                    TTF_GetError();
+                    cout<<TTF_GetError();
 				}
 
 }
@@ -50,10 +50,12 @@ void waitUntilKeyPressed()
     }
 }
 
-void quitSDL(SDL_Window* window, SDL_Renderer* renderer)
+void quitSDL(SDL_Window* &window, SDL_Renderer* &renderer)
 {
 	SDL_DestroyRenderer(renderer);
+	renderer = nullptr;
 	SDL_DestroyWindow(window);
+	window = nullptr;
 	Mix_Quit();
 	TTF_Quit();
 	IMG_Quit();

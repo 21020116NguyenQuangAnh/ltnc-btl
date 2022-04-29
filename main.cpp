@@ -138,6 +138,7 @@ int main (int argc, char*argv[])
         scoreTexture = nullptr;
     }
     close();
+    cerr << "Game Over";
     return 0;
 }
 
@@ -156,6 +157,7 @@ void open()
 
 void close()
 {
+    quitSDL(window, renderer);
     SDL_DestroyTexture( menu );
     menu = nullptr;
     SDL_DestroyTexture( background );
@@ -175,12 +177,10 @@ void close()
     Die = nullptr;
     Mix_FreeMusic( Music );
     Music = nullptr;
-    quitSDL(window, renderer);
-    TTF_CloseFont( fontText );
-	fontText = nullptr;
-	TTF_CloseFont( fontButton );
+    fontText = nullptr;
+    TTF_CloseFont(fontText);
 	fontButton = nullptr;
-
+	TTF_CloseFont(fontButton);
 }
 
 
