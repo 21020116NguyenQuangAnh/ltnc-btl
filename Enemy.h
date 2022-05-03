@@ -17,6 +17,6 @@ struct Enemy{
 
     void setpos(int _x, int _y);
     void render(SDL_Renderer* renderer, SDL_Texture* enemyTexture, SDL_Rect &eRect);
-    void move(int score);
+    void move(int time);
 };
 #endif // ENEMY_H

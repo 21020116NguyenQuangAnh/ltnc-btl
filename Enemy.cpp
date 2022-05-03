@@ -17,9 +17,9 @@ void Enemy::render(SDL_Renderer* renderer, SDL_Texture* enemyTexture, SDL_Rect &
     SDL_RenderCopy( renderer, enemyTexture, NULL, &eRect);
 }
 
-void Enemy::move(int score)
+void Enemy::move(int time)
 {
-     x-=5 + (score/500);
+     x-=5 + (time/1000);
         if(x < 0)
         {
             int random = rand()%3;

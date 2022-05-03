@@ -33,7 +33,19 @@ void Text::setpos(int _x, int _y)
 void Text::render (SDL_Renderer* renderer, SDL_Texture* textTexture, SDL_Rect &Rect)
 {
         SDL_QueryTexture(textTexture, nullptr, nullptr, &Rect.w, &Rect.h);
-        Rect.x = (SCREEN_WIDTH - Rect.w) / 2;
+        switch (x)
+        {
+            case 0:
+                Rect.x = (SCREEN_WIDTH - Rect.w) / 2;
+                break;
+            case 1:
+                Rect.x = (SCREEN_WIDTH - Rect.w);
+                break;
+            case 2:
+                Rect.x = Rect.w;
+                break;
+            default: break;
+        }
         Rect.y = y;
         Rect.w = Rect.w;
         Rect.h = Rect.h;

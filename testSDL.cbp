@@ -33,6 +33,8 @@
 		</Compiler>
 		<Unit filename="Character.cpp" />
 		<Unit filename="Character.h" />
+		<Unit filename="Dorayaki.cpp" />
+		<Unit filename="Dorayaki.h" />
 		<Unit filename="Enemy.cpp" />
 		<Unit filename="Enemy.h" />
 		<Unit filename="Text.cpp" />

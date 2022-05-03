@@ -7,7 +7,7 @@ struct Text{
     int x;
     int y;
     SDL_Rect Rect;
-    SDL_Color Color = {255, 255, 255};
+    SDL_Color Color;
     string content;
 
     SDL_Texture* loadFromRenderedText( TTF_Font* fontText, SDL_Renderer* renderer );
