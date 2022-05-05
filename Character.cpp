@@ -19,21 +19,82 @@ void Character::render(SDL_Renderer* renderer, SDL_Texture* characterTexture, SD
 
 void Character::move(SDL_Event &e)
 {
-        if (e.type == SDL_KEYDOWN) {
-                switch (e.key.keysym.sym) {
-                    case SDLK_ESCAPE: break;
-                    case SDLK_LEFT: x = (x + SCREEN_WIDTH - step) % SCREEN_WIDTH;
-                        break;
-                    case SDLK_RIGHT: x = (x + step) % SCREEN_WIDTH;
-                        break;
-                    case SDLK_DOWN: y = (y + step) % SCREEN_HEIGHT;
-                        break;
-                    case SDLK_UP: y = (y + SCREEN_HEIGHT - step) % SCREEN_HEIGHT;
-                        break;
-                    default: break;
+        switch (e.type)
+        {
+            case SDL_KEYDOWN:
+            {
+                    switch (e.key.keysym.sym) {
+                        case SDLK_ESCAPE: break;
+                        case SDLK_LEFT:
+                        {
+                            x = (x - step);
+                            if (x < 0)
+                                    x = SCREEN_WIDTH - CHARACTER_WIDTH;
+                        }
+                            break;
+                        case SDLK_RIGHT:
+                        {
+                            x = (x + step);
+                            if (x > SCREEN_WIDTH)
+                                x = 0;
+                        }
+                            break;
+                        case SDLK_DOWN:
+                        {
+                            y = (y + step);
+                            if (y > SCREEN_HEIGHT)
+                                y = 0;
+                        }
+                            break;
+                        case SDLK_UP:
+                         {
+                            y = (y - step);
+                            if (y < 0)
+                                y = SCREEN_HEIGHT - CHARACTER_HEIGHT;
+                         }
+                            break;
+                        default: break;
+                    }
+            }
+            break;
+            case SDL_MOUSEMOTION:
+            {
+                int x_dir = x - e.motion.x;
+                int y_dir = y - e.motion.y;
+                double distance = sqrt(x_dir * x_dir + y_dir * y_dir);
+                if (distance >= 15)
+                {
+                x -= 30 * x_dir/distance;
+                y -= 30 * y_dir/distance;
                 }
             }
+            break;
+            case SDL_MOUSEBUTTONDOWN:
+            {
+                switch (e.button.button)
+                {
+                    case SDL_BUTTON_LEFT:
+                    {
+                         x = e.button.x;
+                         y = e.button.y;
+                    }
+                    break;
+                    case SDL_BUTTON_RIGHT:
+                    {
+                         x = 0;
+                         y = SCREEN_HEIGHT - CHARACTER_HEIGHT;
+                    }
+
+                }
+
+            }
+            break;
+            default: break;
+        }
 }
+
+
+
 
 
 

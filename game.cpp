@@ -16,16 +16,16 @@ bool check (SDL_Rect object1Rect, SDL_Rect& characterRect)
 
     if (left2 + 48 < right1 && right2 - 48 > right1 )
     {
-        if (top2 < bot1 && bot2 > bot1)
+        if (top2 + 20 < bot1 && bot2 - 20 > bot1)
             return true;
-        else if (top2 < top1 && bot2 > top1)
+        else if (top2 + 20 < top1 && bot2 - 20 > top1)
             return true;
     }
     if (left2 + 48 < left1 && right2 - 48 > left1)
     {
-        if (top2 < bot1 && bot2 > bot1)
+        if (top2 + 20 < bot1 && bot2 - 20 > bot1)
             return true;
-        else if (top2 < top1 && bot2 > top1)
+        else if (top2 + 20 < top1 && bot2 - 20 > top1)
             return true;
     }
     return false;

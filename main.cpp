@@ -5,6 +5,7 @@
 #include <SDL_ttf.h>
 #include <cstdlib>
 #include <ctime>
+#include <cmath>
 
 #include "Utils.h"
 #include "common.h"
