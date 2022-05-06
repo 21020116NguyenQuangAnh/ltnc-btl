@@ -13,6 +13,7 @@
 #include "Character.h"
 #include "Enemy.h"
 #include "Dorayaki.h"
+#include "Heart.h"
 #include "game.h"
 
 using namespace std;
@@ -21,6 +22,7 @@ Character character;
 Character DeadCharacter;
 Enemy enemy[MAX];
 Dorayaki dorayaki[MAX];
+Heart heart[MAX];
 Text text;
 Text FoodText;
 Text Button[2];
@@ -35,6 +37,7 @@ SDL_Texture* characterTexture = NULL;
 SDL_Texture* DeadCharacterTexture = NULL;
 SDL_Texture* enemyTexture = NULL;
 SDL_Texture* dorayakiTexture = NULL;
+SDL_Texture* heartTexture = NULL;
 SDL_Texture* ButtonTexture[2];
 
 SDL_Rect characterRect;
@@ -83,11 +86,14 @@ int main (int argc, char*argv[])
             enemy[i].render(renderer, enemyTexture, enemy[i].eRect);
             dorayaki[i].setpos(rand()%1000, 0 - 200 * i);
             dorayaki[i].render(renderer, dorayakiTexture, dorayaki[i].Rect);
+            heart[i].setpos(50 * i, 0);
+            heart[i].render(renderer, heartTexture, heart[i].Rect);
         }
 
         bool GameOver = false;
         int time = 0;
         int food = 0;
+        int heart_num = 3;
 
         while(!GameOver)
         {
@@ -95,6 +101,7 @@ int main (int argc, char*argv[])
             text.content = "Time: " + to_string(time);
             SDL_Texture* textTexture = text.loadFromRenderedText(fontText, renderer);
             text.setpos(0,10);
+            MoreHeart(time, heart_num);
             for(int i = 0; i < MAX; i++)
             {
                 enemy[i].move(time);
@@ -107,14 +114,23 @@ int main (int argc, char*argv[])
                 }
                 if(check(enemy[i].eRect,characterRect))
                 {
-                    GameOver = true;
+                    heart_num = heart_num - 1;
+                    Mix_PlayChannel( -1, Die, 0 );
+                    SDL_Delay(2000);
+                    enemy[i].setpos(SCREEN_WIDTH, place[rand()%3]);
                 }
             }
+            if (heart_num == 0)
+                GameOver = true;
             FoodText.content = "Food: " + to_string(food);
             SDL_Texture* foodTexture = FoodText.loadFromRenderedText(fontText, renderer);
             FoodText.setpos(1,10);
             SDL_RenderClear(renderer);
             SDL_RenderCopy(renderer, background, nullptr, nullptr);
+            for (int i = 0; i < heart_num; i++)
+            {
+                heart[i].render(renderer, heartTexture, heart[i].Rect);
+            }
             if (!GameOver)
             {
                 character.render(renderer, characterTexture, characterRect);
@@ -139,6 +155,8 @@ int main (int argc, char*argv[])
             SDL_RenderPresent(renderer);
             SDL_DestroyTexture( textTexture );
             textTexture = nullptr;
+            SDL_DestroyTexture(foodTexture);
+            foodTexture = nullptr;
         }
         Mix_PlayChannel( -1, Die, 0 );
         SDL_Delay(5000);
@@ -172,6 +190,7 @@ void open()
     DeadCharacterTexture = loadTexture("mon_end.png", renderer);
     enemyTexture = loadTexture("mouse5.png", renderer);
     dorayakiTexture = loadTexture("dorayaki.png", renderer);
+    heartTexture = loadTexture("Heart.png", renderer);
     fontText = TTF_OpenFont( "OpenSans_Regular.ttf", 24 );
     fontButton = TTF_OpenFont( "SuperMario256.ttf", 36);
     Music = Mix_LoadMUS( "DoraemonNoUta.wav" );

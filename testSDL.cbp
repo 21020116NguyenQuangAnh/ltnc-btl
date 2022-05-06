@@ -37,6 +37,8 @@
 		<Unit filename="Dorayaki.h" />
 		<Unit filename="Enemy.cpp" />
 		<Unit filename="Enemy.h" />
+		<Unit filename="Heart.cpp" />
+		<Unit filename="Heart.h" />
 		<Unit filename="Text.cpp" />
 		<Unit filename="Text.h" />
 		<Unit filename="Utils.cpp" />

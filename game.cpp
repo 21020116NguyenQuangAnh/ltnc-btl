@@ -62,3 +62,14 @@ int Selection(SDL_Event &e, Text Button[])
         }
     }
 }
+
+int MoreHeart(int time, int &heart_num)
+{
+    if (time % 1000 == 0)
+    {
+        heart_num++;
+        if (heart_num >= 5)
+            heart_num = 5;
+    }
+    return heart_num;
+}
