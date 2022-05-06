@@ -35,14 +35,14 @@ void Character::move(SDL_Event &e)
                         case SDLK_RIGHT:
                         {
                             x = (x + step);
-                            if (x > SCREEN_WIDTH)
+                            if (x > SCREEN_WIDTH - CHARACTER_WIDTH)
                                 x = 0;
                         }
                             break;
                         case SDLK_DOWN:
                         {
                             y = (y + step);
-                            if (y > SCREEN_HEIGHT)
+                            if (y > SCREEN_HEIGHT - CHARACTER_HEIGHT)
                                 y = 0;
                         }
                             break;

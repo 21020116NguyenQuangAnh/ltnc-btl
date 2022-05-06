@@ -94,6 +94,7 @@ int main (int argc, char*argv[])
         int time = 0;
         int food = 0;
         int heart_num = 3;
+        int dead_time = 0;
 
         while(!GameOver)
         {
@@ -102,6 +103,7 @@ int main (int argc, char*argv[])
             SDL_Texture* textTexture = text.loadFromRenderedText(fontText, renderer);
             text.setpos(0,10);
             MoreHeart(time, heart_num);
+            int old_heart = heart_num;
             for(int i = 0; i < MAX; i++)
             {
                 enemy[i].move(time);
@@ -112,16 +114,16 @@ int main (int argc, char*argv[])
                     dorayaki[i].setpos(rand()%1000, -200);
                     dorayaki[i].render(renderer, dorayakiTexture, dorayaki[i].Rect);
                 }
-                if(check(enemy[i].eRect,characterRect))
+                if (time - dead_time >= 50)
                 {
-                    heart_num = heart_num - 1;
-                    Mix_PlayChannel( -1, Die, 0 );
-                    SDL_Delay(2000);
-                    enemy[i].setpos(SCREEN_WIDTH, place[rand()%3]);
+                    if(check(enemy[i].eRect,characterRect))
+                    {
+                        heart_num = heart_num - 1;
+                        Mix_PlayChannel( -1, Die, 0 );
+                        dead_time = time;
+                    }
                 }
             }
-            if (heart_num == 0)
-                GameOver = true;
             FoodText.content = "Food: " + to_string(food);
             SDL_Texture* foodTexture = FoodText.loadFromRenderedText(fontText, renderer);
             FoodText.setpos(1,10);
@@ -131,15 +133,6 @@ int main (int argc, char*argv[])
             {
                 heart[i].render(renderer, heartTexture, heart[i].Rect);
             }
-            if (!GameOver)
-            {
-                character.render(renderer, characterTexture, characterRect);
-            }
-            else
-            {
-                DeadCharacter.setpos(characterRect.x, characterRect.y);
-                DeadCharacter.render(renderer, DeadCharacterTexture, characterRect);
-            }
             for(int i = 0; i < MAX; i++)
             {
                 enemy[i].render(renderer, enemyTexture, enemy[i].eRect);
@@ -147,10 +140,23 @@ int main (int argc, char*argv[])
             }
             text.render(renderer, textTexture, text.Rect);
             FoodText.render(renderer, foodTexture, FoodText.Rect);
+            if (heart_num >= old_heart)
+            {
+                character.render(renderer, characterTexture, characterRect);
+            }
+            else
+            {
+                DeadCharacter.setpos(characterRect.x, characterRect.y);
+                DeadCharacter.render(renderer, DeadCharacterTexture, characterRect);
+                SDL_RenderPresent(renderer);
+                SDL_Delay(2000);
+            }
             SDL_RenderPresent(renderer);
+            if (heart_num == 0)
+                GameOver = true;
 
             if (SDL_PollEvent(&e) == 0) continue;
-            if (e.type == SDL_QUIT) break;
+            if (e.type == SDL_QUIT) return 0;
             character.move(e);
             SDL_RenderPresent(renderer);
             SDL_DestroyTexture( textTexture );
@@ -158,8 +164,7 @@ int main (int argc, char*argv[])
             SDL_DestroyTexture(foodTexture);
             foodTexture = nullptr;
         }
-        Mix_PlayChannel( -1, Die, 0 );
-        SDL_Delay(5000);
+        SDL_Delay(3000);
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, background, nullptr, nullptr);
         FinalScore.content = "Your score is: " + to_string(time * food);
