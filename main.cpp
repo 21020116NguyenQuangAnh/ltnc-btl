@@ -157,6 +157,8 @@ int main (int argc, char*argv[])
 
             if (SDL_PollEvent(&e) == 0) continue;
             if (e.type == SDL_QUIT) return 0;
+            PauseGame(e);
+            PauseMusic(e);
             character.move(e);
             SDL_RenderPresent(renderer);
             SDL_DestroyTexture( textTexture );
@@ -217,6 +219,8 @@ void close()
     enemyTexture = nullptr;
     SDL_DestroyTexture( dorayakiTexture );
     dorayakiTexture = nullptr;
+    SDL_DestroyTexture( heartTexture );
+    heartTexture = nullptr;
     for (int i = 0; i < 2; i++)
     {
         SDL_DestroyTexture(ButtonTexture[i]);

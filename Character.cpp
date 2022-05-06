@@ -24,7 +24,6 @@ void Character::move(SDL_Event &e)
             case SDL_KEYDOWN:
             {
                     switch (e.key.keysym.sym) {
-                        case SDLK_ESCAPE: break;
                         case SDLK_LEFT:
                         {
                             x = (x - step);

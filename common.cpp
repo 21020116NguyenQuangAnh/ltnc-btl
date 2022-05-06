@@ -18,9 +18,32 @@ SDL_Texture* loadTexture( string path, SDL_Renderer* renderer )
     }
     return newTexture;
 }
+
  void PauseGame (SDL_Event &e)
  {
+             if (e.type == SDL_KEYDOWN)
+             {
+                 if (e.key.keysym.sym == SDLK_SPACE)
+                    waitUntilKeyPressed();
+             }
+}
 
- }
+void PauseMusic (SDL_Event &e)
+{
+    if (e.type == SDL_KEYDOWN)
+    {
+        if (e.key.keysym.sym == SDLK_m)
+        {
+            if(Mix_PausedMusic() == 1)
+            {
+                Mix_ResumeMusic();
+            }
+            else
+            {
+                Mix_PauseMusic();
+            }
+        }
+    }
+}
 
 

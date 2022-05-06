@@ -19,4 +19,6 @@ const int SCREEN_HEIGHT = 600;
 const string WINDOW_TITLE = "Game";
 
 SDL_Texture* loadTexture( string path, SDL_Renderer* renderer );
+void PauseGame (SDL_Event &e);
+void PauseMusic (SDL_Event &e);
 #endif // COMMON_H
