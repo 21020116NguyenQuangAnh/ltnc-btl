@@ -61,6 +61,7 @@ int main (int argc, char*argv[])
     SDL_Event e;
     bool QuitGame = false;
 
+    //Vẽ và hiển thị Menu
     SDL_RenderCopy(renderer, menu, nullptr, nullptr);
     Button[0].content = "Play Game";
     Button[0].Color = {255,0,0};
@@ -74,10 +75,14 @@ int main (int argc, char*argv[])
     }
     SDL_RenderPresent(renderer);
 
+    //Chọn nút
     if (Selection(e, Button) == 1)
         QuitGame = 1;
+
+    //Vào Game
     while (!QuitGame)
     {
+        //Đặt ví trí ban đầu cho nhân vật, bánh, chuột và tim
         character.setpos(0,400);
         character.render(renderer, characterTexture, characterRect);
         for (int i = 0; i < MAX; i++)
@@ -96,24 +101,34 @@ int main (int argc, char*argv[])
         int heart_num = 3;
         int dead_time = 0;
 
+        //Chạy Game
         while(!GameOver)
         {
+            //Đặt thời gian
             time++;
             text.content = "Time: " + to_string(time);
             SDL_Texture* textTexture = text.loadFromRenderedText(fontText, renderer);
             text.setpos(0,10);
+
+            //Thêm mạng
             MoreHeart(time, heart_num);
+
             int old_heart = heart_num;
             for(int i = 0; i < MAX; i++)
             {
+                //Di chuyển chuột và bánh
                 enemy[i].move(time);
                 dorayaki[i].move();
+
+                //Check va chạm giữa bánh và nhân vật
                 if (check(dorayaki[i].Rect,characterRect))
                 {
                     food++;
                     dorayaki[i].setpos(rand()%1000, -200);
                     dorayaki[i].render(renderer, dorayakiTexture, dorayaki[i].Rect);
                 }
+
+                //Check mất mạng
                 if (time - dead_time >= 50)
                 {
                     if(check(enemy[i].eRect,characterRect))
@@ -124,9 +139,13 @@ int main (int argc, char*argv[])
                     }
                 }
             }
+
+            //Đặt số lượng bánh ăn được
             FoodText.content = "Food: " + to_string(food);
             SDL_Texture* foodTexture = FoodText.loadFromRenderedText(fontText, renderer);
             FoodText.setpos(1,10);
+
+            //Vẽ và hiển thị các đối tượng lên màn hình
             SDL_RenderClear(renderer);
             SDL_RenderCopy(renderer, background, nullptr, nullptr);
             for (int i = 0; i < heart_num; i++)
@@ -152,21 +171,27 @@ int main (int argc, char*argv[])
                 SDL_Delay(2000);
             }
             SDL_RenderPresent(renderer);
+
+            //Check Game Over
             if (heart_num == 0)
                 GameOver = true;
 
+            //Di chuyển nhân vật và các chức năng tạm dừng
             if (SDL_PollEvent(&e) == 0) continue;
             if (e.type == SDL_QUIT) return 0;
             PauseGame(e);
             PauseMusic(e);
             character.move(e);
             SDL_RenderPresent(renderer);
+
             SDL_DestroyTexture( textTexture );
             textTexture = nullptr;
             SDL_DestroyTexture(foodTexture);
             foodTexture = nullptr;
         }
         SDL_Delay(3000);
+
+        //Hiển thị màn hinh chơi lại và lựa chọn
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, background, nullptr, nullptr);
         FinalScore.content = "Your score is: " + to_string(time * food);

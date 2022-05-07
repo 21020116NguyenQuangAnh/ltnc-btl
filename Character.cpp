@@ -27,30 +27,22 @@ void Character::move(SDL_Event &e)
                         case SDLK_LEFT:
                         {
                             x = (x - step);
-                            if (x < 0)
-                                    x = SCREEN_WIDTH - CHARACTER_WIDTH;
                         }
                             break;
                         case SDLK_RIGHT:
                         {
                             x = (x + step);
-                            if (x > SCREEN_WIDTH - CHARACTER_WIDTH)
-                                x = 0;
                         }
                             break;
                         case SDLK_DOWN:
                         {
                             y = (y + step);
-                            if (y > SCREEN_HEIGHT - CHARACTER_HEIGHT)
-                                y = 0;
                         }
                             break;
                         case SDLK_UP:
-                         {
+                        {
                             y = (y - step);
-                            if (y < 0)
-                                y = SCREEN_HEIGHT - CHARACTER_HEIGHT;
-                         }
+                        }
                             break;
                         default: break;
                     }
@@ -90,6 +82,19 @@ void Character::move(SDL_Event &e)
             break;
             default: break;
         }
+        goin();
+}
+
+void Character::goin ()
+{
+    if (x < 0)
+        x = 0;
+    else if (x > SCREEN_WIDTH - CHARACTER_WIDTH)
+        x = SCREEN_WIDTH - CHARACTER_WIDTH;
+    if (y > SCREEN_HEIGHT - CHARACTER_HEIGHT)
+        y = SCREEN_HEIGHT - CHARACTER_HEIGHT;
+    else if (y < 0)
+        y = 0;
 }
 
 

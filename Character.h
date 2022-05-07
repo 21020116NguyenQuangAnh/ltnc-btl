@@ -16,6 +16,7 @@ struct Character{
     void setpos(int _x, int  _y);
     void render(SDL_Renderer* renderer, SDL_Texture* characterTexture, SDL_Rect &characterRect);
     void move(SDL_Event &e);
+    void goin();
 };
 
 #endif // CHARACTER_H
