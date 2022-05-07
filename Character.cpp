@@ -61,10 +61,10 @@ void Character::move(SDL_Event &e)
                 int x_dir = x - e.motion.x;
                 int y_dir = y - e.motion.y;
                 double distance = sqrt(x_dir * x_dir + y_dir * y_dir);
-                if (distance >= 15)
+                if (distance >= 25)
                 {
-                x -= 30 * x_dir/distance;
-                y -= 30 * y_dir/distance;
+                x -= 50 * x_dir/distance;
+                y -= 50 * y_dir/distance;
                 }
             }
             break;
