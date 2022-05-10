@@ -8,6 +8,7 @@
 #include <SDL_ttf.h>
 #include <string>
 #include <cmath>
+#include <fstream>
 
 #include "Utils.h"
 
@@ -21,4 +22,6 @@ const string WINDOW_TITLE = "Game";
 SDL_Texture* loadTexture( string path, SDL_Renderer* renderer );
 void PauseGame (SDL_Event &e);
 void PauseMusic (SDL_Event &e);
+int GetHighScore (string path);
+void UpdateHighScore (string path, int score, int highscore);
 #endif // COMMON_H

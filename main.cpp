@@ -25,6 +25,7 @@ Dorayaki dorayaki[MAX];
 Heart heart[MAX];
 Text text;
 Text FoodText;
+Text HighScoreText;
 Text Button[2];
 Text FinalScore;
 
@@ -100,6 +101,7 @@ int main (int argc, char*argv[])
         int food = 0;
         int heart_num = 3;
         int dead_time = 0;
+        int highscore = GetHighScore("HighScore.txt");
 
         //Chạy Game
         while(!GameOver)
@@ -109,6 +111,12 @@ int main (int argc, char*argv[])
             text.content = "Time: " + to_string(time);
             SDL_Texture* textTexture = text.loadFromRenderedText(fontText, renderer);
             text.setpos(0,10);
+
+            //Điểm cao
+            HighScoreText.content = "High Score: " + to_string(highscore);
+            HighScoreText.Color = {255,0,0};
+            SDL_Texture* HighScoreTexture = HighScoreText.loadFromRenderedText(fontText, renderer);
+            HighScoreText.setpos(1,550);
 
             //Thêm mạng
             MoreHeart(time, heart_num);
@@ -159,6 +167,7 @@ int main (int argc, char*argv[])
             }
             text.render(renderer, textTexture, text.Rect);
             FoodText.render(renderer, foodTexture, FoodText.Rect);
+            HighScoreText.render(renderer, HighScoreTexture, HighScoreText.Rect);
             if (heart_num >= old_heart)
             {
                 character.render(renderer, characterTexture, characterRect);
@@ -191,10 +200,14 @@ int main (int argc, char*argv[])
         }
         SDL_Delay(3000);
 
+        //Cập nhật điểm cao
+        int score = time * food;
+        UpdateHighScore ("HighScore.txt", score, highscore);
+
         //Hiển thị màn hinh chơi lại và lựa chọn
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, background, nullptr, nullptr);
-        FinalScore.content = "Your score is: " + to_string(time * food);
+        FinalScore.content = "Your score is: " + to_string(score);
         FinalScore.Color = {130, 0, 255};
         SDL_Texture* scoreTexture = FinalScore.loadFromRenderedText(fontButton, renderer);
         FinalScore.setpos(0,10);

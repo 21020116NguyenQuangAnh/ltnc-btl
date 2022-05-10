@@ -42,7 +42,7 @@ void Text::render (SDL_Renderer* renderer, SDL_Texture* textTexture, SDL_Rect &R
                 Rect.x = (SCREEN_WIDTH - Rect.w);
                 break;
             case 2:
-                Rect.x = Rect.w;
+                Rect.x = 0;
                 break;
             default: break;
         }

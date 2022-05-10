@@ -46,4 +46,20 @@ void PauseMusic (SDL_Event &e)
     }
 }
 
+int GetHighScore (string path)
+{
+    int high;
+    ifstream file (path);
+    file >> high;
+    return high;
+}
+
+void UpdateHighScore (string path, int score, int highscore)
+{
+    ofstream file (path);
+    if (score > highscore)
+        highscore = score;
+    file << highscore;
+}
+
 

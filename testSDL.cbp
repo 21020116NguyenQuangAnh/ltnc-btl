@@ -39,6 +39,7 @@
 		<Unit filename="Enemy.h" />
 		<Unit filename="Heart.cpp" />
 		<Unit filename="Heart.h" />
+		<Unit filename="HighScore.txt" />
 		<Unit filename="Text.cpp" />
 		<Unit filename="Text.h" />
 		<Unit filename="Utils.cpp" />
