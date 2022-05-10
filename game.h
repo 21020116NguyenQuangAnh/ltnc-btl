@@ -9,5 +9,5 @@
 bool check (SDL_Rect object1Rect, SDL_Rect& characterRect);
 bool CheckInside (int &x, int &y, SDL_Rect& Rect);
 int Selection(SDL_Event &e, Text Button[]);
-int MoreHeart(int time, int& heart);
+int MoreHeart(int time, int& heart, Mix_Chunk* Boost);
 #endif // GAME_H

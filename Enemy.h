@@ -1,8 +1,6 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include <cstdlib>
-#include <ctime>
 #include "common.h"
 
 #define ENEMY_WIDTH 100

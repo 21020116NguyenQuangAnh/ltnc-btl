@@ -45,6 +45,8 @@ SDL_Rect characterRect;
 
 Mix_Music *Music = NULL;
 Mix_Chunk *Die = NULL;
+Mix_Chunk *Eat = NULL;
+Mix_Chunk *Boost = NULL;
 
 TTF_Font* fontText = NULL;
 TTF_Font* fontButton = NULL;
@@ -119,7 +121,7 @@ int main (int argc, char*argv[])
             HighScoreText.setpos(1,550);
 
             //Thêm mạng
-            MoreHeart(time, heart_num);
+            MoreHeart(time, heart_num, Boost);
 
             int old_heart = heart_num;
             for(int i = 0; i < MAX; i++)
@@ -132,6 +134,7 @@ int main (int argc, char*argv[])
                 if (check(dorayaki[i].Rect,characterRect))
                 {
                     food++;
+                    Mix_PlayChannel(-1, Eat, 0);
                     dorayaki[i].setpos(rand()%1000, -200);
                     dorayaki[i].render(renderer, dorayakiTexture, dorayaki[i].Rect);
                 }
@@ -193,10 +196,13 @@ int main (int argc, char*argv[])
             character.move(e);
             SDL_RenderPresent(renderer);
 
-            SDL_DestroyTexture( textTexture );
+            SDL_DestroyTexture(textTexture);
             textTexture = nullptr;
             SDL_DestroyTexture(foodTexture);
             foodTexture = nullptr;
+            SDL_DestroyTexture(HighScoreTexture);
+            HighScoreTexture = nullptr;
+
         }
         SDL_Delay(3000);
 
@@ -236,37 +242,43 @@ void open()
     enemyTexture = loadTexture("mouse5.png", renderer);
     dorayakiTexture = loadTexture("dorayaki.png", renderer);
     heartTexture = loadTexture("Heart.png", renderer);
-    fontText = TTF_OpenFont( "OpenSans_Regular.ttf", 24 );
-    fontButton = TTF_OpenFont( "SuperMario256.ttf", 36);
-    Music = Mix_LoadMUS( "DoraemonNoUta.wav" );
-	Die = Mix_LoadWAV( "doraemonsms.wav" );
+    fontText = TTF_OpenFont("OpenSans_Regular.ttf", 24);
+    fontButton = TTF_OpenFont("SuperMario256.ttf", 36);
+    Music = Mix_LoadMUS("DoraemonNoUta.wav");
+	Die = Mix_LoadWAV("doraemonsms.wav");
+	Eat = Mix_LoadWAV("game_treasure.wav");
+	Boost = Mix_LoadWAV("player_boost.wav");
 }
 
 void close()
 {
     quitSDL(window, renderer);
-    SDL_DestroyTexture( menu );
+    SDL_DestroyTexture(menu);
     menu = nullptr;
-    SDL_DestroyTexture( background );
+    SDL_DestroyTexture(background);
     background = nullptr;
-    SDL_DestroyTexture( characterTexture );
+    SDL_DestroyTexture(characterTexture);
     characterTexture = nullptr;
-    SDL_DestroyTexture( DeadCharacterTexture);
+    SDL_DestroyTexture(DeadCharacterTexture);
     DeadCharacterTexture = nullptr;
-    SDL_DestroyTexture( enemyTexture );
+    SDL_DestroyTexture(enemyTexture);
     enemyTexture = nullptr;
-    SDL_DestroyTexture( dorayakiTexture );
+    SDL_DestroyTexture(dorayakiTexture);
     dorayakiTexture = nullptr;
-    SDL_DestroyTexture( heartTexture );
+    SDL_DestroyTexture(heartTexture);
     heartTexture = nullptr;
     for (int i = 0; i < 2; i++)
     {
         SDL_DestroyTexture(ButtonTexture[i]);
         ButtonTexture[i] = nullptr;
     }
-    Mix_FreeChunk( Die );
+    Mix_FreeChunk(Die);
     Die = nullptr;
-    Mix_FreeMusic( Music );
+    Mix_FreeChunk(Eat);
+    Eat = nullptr;
+    Mix_FreeChunk(Boost);
+    Boost = nullptr;
+    Mix_FreeMusic(Music);
     Music = nullptr;
     fontText = nullptr;
     TTF_CloseFont(fontText);

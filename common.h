@@ -8,6 +8,8 @@
 #include <SDL_ttf.h>
 #include <string>
 #include <cmath>
+#include <cstdlib>
+#include <ctime>
 #include <fstream>
 
 #include "Utils.h"

@@ -20,7 +20,7 @@ void Enemy::render(SDL_Renderer* renderer, SDL_Texture* enemyTexture, SDL_Rect &
 void Enemy::move(int time)
 {
     int speed = 5 + (time/1000);
-    const int max_speed = 17;
+    const int max_speed = 20;
         if (speed > max_speed)
         {
             speed = max_speed;

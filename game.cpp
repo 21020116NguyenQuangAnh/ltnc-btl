@@ -66,11 +66,13 @@ int Selection(SDL_Event &e, Text Button[])
     }
 }
 
-int MoreHeart(int time, int &heart_num)
+int MoreHeart(int time, int &heart_num, Mix_Chunk* Boost)
 {
     if (time % 1000 == 0)
     {
         heart_num++;
+        if (heart_num <= 5)
+            Mix_PlayChannel(-1,Boost,0);
         if (heart_num >= 5)
             heart_num = 5;
     }
