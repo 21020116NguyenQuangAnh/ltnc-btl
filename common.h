@@ -15,6 +15,7 @@
 #include "Utils.h"
 
 #define MAX 5
+#define button_num 3
 using namespace std;
 
 const int SCREEN_WIDTH = 1200;

@@ -53,7 +53,7 @@ int Selection(SDL_Event &e, Text Button[])
                     return 1;
                 case SDL_MOUSEBUTTONDOWN:
                 {
-                     for (int i = 0; i < 2; i++)
+                     for (int i = 0; i < button_num; i++)
                      {
                          if (CheckInside(e.button.x, e.button.y, Button[i].Rect))
                             return i;

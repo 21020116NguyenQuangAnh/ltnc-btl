@@ -26,7 +26,7 @@ Heart heart[MAX];
 Text text;
 Text FoodText;
 Text HighScoreText;
-Text Button[2];
+Text Button[button_num];
 Text FinalScore;
 
 SDL_Window* window = NULL;
@@ -39,7 +39,8 @@ SDL_Texture* DeadCharacterTexture = NULL;
 SDL_Texture* enemyTexture = NULL;
 SDL_Texture* dorayakiTexture = NULL;
 SDL_Texture* heartTexture = NULL;
-SDL_Texture* ButtonTexture[2];
+SDL_Texture* instructionTexture = NULL;
+SDL_Texture* ButtonTexture[button_num];
 
 SDL_Rect characterRect;
 
@@ -70,7 +71,9 @@ int main (int argc, char*argv[])
     Button[0].Color = {255,0,0};
     Button[1].content = "Quit Game";
     Button[1].Color = {255,0,0};
-    for (int i = 0; i < 2; i++)
+    Button[2].content = "Instruction";
+    Button[2].Color = {255,0,0};
+    for (int i = 0; i < button_num; i++)
     {
         ButtonTexture[i] = Button[i].loadFromRenderedText(fontButton, renderer);
         Button[i].setpos(0, 250 + 100 * i);
@@ -79,8 +82,21 @@ int main (int argc, char*argv[])
     SDL_RenderPresent(renderer);
 
     //Chọn nút
-    if (Selection(e, Button) == 1)
-        QuitGame = 1;
+    switch (Selection(e, Button))
+    {
+        case 1:
+            QuitGame = 1;
+            break;
+        case 2:
+            {
+                SDL_RenderClear(renderer);
+                SDL_RenderCopy(renderer,instructionTexture,nullptr,nullptr);
+                SDL_RenderPresent(renderer);
+                waitUntilKeyPressed();
+            }
+            break;
+        default:break;
+    }
 
     //Vào Game
     while (!QuitGame)
@@ -242,6 +258,7 @@ void open()
     enemyTexture = loadTexture("mouse5.png", renderer);
     dorayakiTexture = loadTexture("dorayaki.png", renderer);
     heartTexture = loadTexture("Heart.png", renderer);
+    instructionTexture = loadTexture("Instruction.png",renderer);
     fontText = TTF_OpenFont("OpenSans_Regular.ttf", 24);
     fontButton = TTF_OpenFont("SuperMario256.ttf", 36);
     Music = Mix_LoadMUS("DoraemonNoUta.wav");
@@ -267,7 +284,9 @@ void close()
     dorayakiTexture = nullptr;
     SDL_DestroyTexture(heartTexture);
     heartTexture = nullptr;
-    for (int i = 0; i < 2; i++)
+    SDL_DestroyTexture(instructionTexture);
+    instructionTexture = nullptr;
+    for (int i = 0; i < button_num; i++)
     {
         SDL_DestroyTexture(ButtonTexture[i]);
         ButtonTexture[i] = nullptr;
